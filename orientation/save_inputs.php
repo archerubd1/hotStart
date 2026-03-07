@@ -47,7 +47,7 @@ $stmt->bind_param(
 if ($stmt->execute()) {
     echo "Preferences saved successfully!";
     // Redirect to dashboard or next page
-    // header("Location: dashboard.php");
+    header("Location: complete.php");
     // exit;
 } else {
     echo "Error: " . $stmt->error;

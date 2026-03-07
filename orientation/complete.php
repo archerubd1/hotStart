@@ -5,6 +5,6 @@ There’s no right or wrong way to begin.
 You can follow a suggestion, explore on your own, or return to this later.
 </p>
 
-<a href="../dashboard.php">
+<a href="../complete.php">
 <button>Enter Astraal</button>
 </a>

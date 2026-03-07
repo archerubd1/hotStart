@@ -4,8 +4,8 @@
 // 1. Connect to MySQL
 $host = "localhost";
 $user = "root";  // your DB username
-$password = "";  // your DB password
-$dbname = "your_database_name"; // replace with your DB name
+$password = "root";  // your DB password
+$dbname = "coldstart"; // replace with your DB name
 
 $conn = new mysqli($host, $user, $password, $dbname);
 
@@ -17,18 +17,23 @@ if ($conn->connect_error) {
 // 2. Get form data
 $learner_id = 1; // Replace with session ID if logged in
 
-$comfort_level = isset($_POST['comfort_level']) ? implode(",", $_POST['comfort_level']) : null;
-$learning_preference = isset($_POST['learning_preference']) ? implode(",", $_POST['learning_preference']) : null;
-$intent_clarity = isset($_POST['intent_clarity']) ? implode(",", $_POST['intent_clarity']) : null;
-$hands_on_experience = isset($_POST['hands_on_experience']) ? implode(",", $_POST['hands_on_experience']) : null;
-$time_online = isset($_POST['time_online']) ? implode(",", $_POST['time_online']) : null;
 
-// 3. Prepare and execute SQL
+
+
+$comfort_level = isset($_POST['comfort_level']) ? implode(',', $_POST['comfort_level']) : NULL;
+$learning_preference = isset($_POST['learning_preference']) ? implode(',', $_POST['learning_preference']) : NULL;
+$intent_clarity = isset($_POST['intent_clarity']) ? implode(',', $_POST['intent_clarity']) : NULL;
+$hands_on_experience = isset($_POST['hands_on_experience']) ? implode(',', $_POST['hands_on_experience']) : NULL;
+$time_online = isset($_POST['time_online']) ? implode(',', $_POST['time_online']) : NULL;
 $sql = "INSERT INTO learning_preferences 
         (learner_id, comfort_level, learning_preference, intent_clarity, hands_on_experience, time_online) 
         VALUES (?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+    die("Prepare failed: " . $conn->error);
+}
 $stmt->bind_param(
     "isssss", 
     $learner_id, 

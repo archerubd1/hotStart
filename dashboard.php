@@ -1,217 +1,164 @@
+<?php
+// dashboard.php
+
+$host = "localhost";
+$user = "root";
+$password = "root";
+$dbname = "coldstart";
+
+$conn = new mysqli($host, $user, $password, $dbname);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$learner_id = 1;
+
+$sql = "SELECT * FROM learning_preferences 
+        WHERE learner_id=? 
+        ORDER BY id DESC LIMIT 1";
+
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i",$learner_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$data = array();
+
+if($result->num_rows > 0){
+    $data = $result->fetch_assoc();
+}
+
+$learning_intent = isset($data['learning_preference']) ? $data['learning_preference'] : "NOT SET";
+$skill_gap = isset($data['hands_on_experience']) ? $data['hands_on_experience'] : "NOT SET";
+$learning_direction = isset($data['intent_clarity']) ? $data['intent_clarity'] : "PENDING";
+
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Astraal | Dashboard</title>
+<title>Astraal Dashboard</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
 <style>
 
 body{
-background:#f4f7fb;
+background:#f5f7fb;
 font-family:Arial;
 }
 
-.navbar{
-background:#1e293b;
-}
-
-.navbar-brand{
-color:#fff;
-font-weight:600;
-}
-
 .card{
-border:none;
-border-radius:12px;
-box-shadow:0 4px 14px rgba(0,0,0,0.08);
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.card-title{
+font-weight:bold;
+}
+
+.status{
+font-size:13px;
+color:#777;
 }
 
 .section-title{
-font-size:18px;
-font-weight:600;
-margin-bottom:15px;
-}
-
-.action-card{
-text-align:center;
-padding:25px;
-transition:0.3s;
-}
-
-.action-card:hover{
-transform:translateY(-5px);
-}
-
-.icon{
-font-size:28px;
-margin-bottom:10px;
-color:#198754;
+font-size:20px;
+margin-bottom:20px;
+font-weight:bold;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- NAVBAR -->
+<div class="container mt-5">
 
-<nav class="navbar navbar-dark">
-<div class="container-fluid">
-<span class="navbar-brand">
-<i class="fa-solid fa-brain"></i> Astraal Learning Experience
+<div class="section-title">
+Learning Journey Orchestration
+</div>
+
+<div class="row g-4">
+
+<div class="col-md-4">
+<div class="card p-3">
+<div class="card-title">Learning Intent</div>
+<div class="status">Defined goal or motivation</div>
+<br>
+<span class="badge bg-secondary">
+<?php echo $learning_intent; ?>
 </span>
 </div>
-</nav>
-
-
-<div class="container mt-4">
-
-<!-- WELCOME -->
-
-<div class="card p-4 mb-4">
-
-<h4>Welcome to Astraal</h4>
-
-<p class="text-muted">
-You have completed your orientation.  
-Based on your responses we will guide you to a comfortable starting point.
-</p>
-
 </div>
-
-
-<!-- STARTING SUGGESTIONS -->
-
-<div class="row mb-4">
 
 <div class="col-md-4">
-<div class="card action-card">
-<div class="icon">
-<i class="fa-solid fa-compass"></i>
-</div>
-
-<h5>Guided Path</h5>
-
-<p class="text-muted">
-Start with a recommended structured learning journey.
-</p>
-
-<button class="btn btn-success">
-Start Guided Journey
-</button>
-
+<div class="card p-3">
+<div class="card-title">Skill Gap</div>
+<div class="status">Estimated competency gap</div>
+<br>
+<span class="badge bg-secondary">
+<?php echo $skill_gap; ?>
+</span>
 </div>
 </div>
-
 
 <div class="col-md-4">
-<div class="card action-card">
-
-<div class="icon">
-<i class="fa-solid fa-magnifying-glass"></i>
-</div>
-
-<h5>Explore Topics</h5>
-
-<p class="text-muted">
-Browse courses and explore areas of interest.
-</p>
-
-<button class="btn btn-outline-success">
-Explore Learning
-</button>
-
+<div class="card p-3">
+<div class="card-title">Learning Direction</div>
+<div class="status">Declared pathway direction</div>
+<br>
+<span class="badge bg-warning text-dark">
+<?php echo $learning_direction; ?>
+</span>
 </div>
 </div>
-
 
 <div class="col-md-4">
-<div class="card action-card">
-
-<div class="icon">
-<i class="fa-solid fa-lightbulb"></i>
-</div>
-
-<h5>Discover Skills</h5>
-
-<p class="text-muted">
-Find out what skills you can build next.
-</p>
-
-<button class="btn btn-outline-success">
-View Skill Map
-</button>
-
+<div class="card p-3">
+<div class="card-title">Milestones</div>
+<div class="status">Learning checkpoints</div>
+<br>
+<span class="badge bg-dark">
+LOCKED
+</span>
 </div>
 </div>
 
+<div class="col-md-4">
+<div class="card p-3">
+<div class="card-title">Guided Pathways</div>
+<div class="status">Recommended structured learning</div>
+<br>
+<span class="badge bg-primary">
+ADAPTIVE
+</span>
+</div>
 </div>
 
-
-<!-- LEARNING AREAS -->
-
-<div class="card p-4 mb-4">
-
-<div class="section-title">
-Popular Learning Areas
+<div class="col-md-4">
+<div class="card p-3">
+<div class="card-title">Learning Status</div>
+<div class="status">Overall journey state</div>
+<br>
+<span class="badge bg-success">
+TRACKING ON
+</span>
 </div>
-
-<div class="row">
-
-<div class="col-md-3">
-<button class="btn btn-light w-100 mb-2">
-AI & Machine Learning
-</button>
-</div>
-
-<div class="col-md-3">
-<button class="btn btn-light w-100 mb-2">
-Cybersecurity
-</button>
-</div>
-
-<div class="col-md-3">
-<button class="btn btn-light w-100 mb-2">
-Blockchain
-</button>
-</div>
-
-<div class="col-md-3">
-<button class="btn btn-light w-100 mb-2">
-Data Science
-</button>
 </div>
 
 </div>
 
-</div>
+<br><br>
 
-
-<!-- PROGRESS -->
-
-<div class="card p-4">
-
-<div class="section-title">
-Your Learning Journey
-</div>
-
-<div class="progress mb-2">
-<div class="progress-bar bg-success" style="width:0%">
-0%
-</div>
-</div>
-
-<p class="text-muted">
-Your learning journey will begin once you start your first module.
-</p>
-
-</div>
-
+<a href="orientation/welcome.php" class="btn btn-outline-secondary">
+Redo Orientation
+</a>
 
 </div>
 

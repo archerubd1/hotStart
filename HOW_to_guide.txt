@@ -1,0 +1,257 @@
+Perfect. Below is your complete “How to Execute” documentation for the:
+
+🧭 Astraal Learning Orientation & First-Step Guidance Module
+
+(Cold-Start Trust System)
+Aligned with coldStart.docx
+
+This document is deployment-ready and can be added as:
+
+/docs/HOW_TO_EXECUTE.md
+
+🚀 HOW TO EXECUTE — Astraal Orientation Module
+1️⃣ System Overview
+
+This module:
+
+Is non-adaptive
+
+Uses rule-based logic only
+
+Runs via PHP + Python CLI
+
+Is shared-hosting safe
+
+Is stateless after onboarding
+
+Does not connect to adaptive systems
+
+Execution Flow:
+
+Learner → Welcome → Questions → Save Inputs
+        → Python rule engine
+        → Suggestions stored
+        → Learner chooses
+        → Clean exit
+
+2️⃣ Environment Requirements
+Server Requirements
+
+PHP 7.4+
+
+MySQL 5.7+
+
+Python 3.8+
+
+Shared hosting compatible (GoDaddy, UWAMP, etc.)
+
+Python Dependencies
+
+No external ML libraries required.
+
+Only:
+
+pip install mysql-connector-python
+
+3️⃣ Step-by-Step Deployment
+STEP 1 — Import Database
+
+Open:
+
+phpMyAdmin
+
+OR MySQL CLI
+
+Import:
+
+/database/orientation_schema.sql
+
+
+Verify tables:
+
+learners
+orientation_inputs
+orientation_suggestions
+orientation_log
+
+STEP 2 — Configure Database Credentials
+
+Edit:
+
+/public_html/config/db.php
+
+
+And:
+
+/python/orientation_engine.py
+
+
+Replace:
+
+host="localhost",
+user="db_user",
+password="db_password",
+database="astraal_lxp"
+
+
+With your real credentials.
+
+STEP 3 — Test Python Engine (Manual)
+
+Insert test learner:
+
+INSERT INTO learners (name,email)
+VALUES ('Test User','test@example.com');
+
+
+Insert test orientation input:
+
+INSERT INTO orientation_inputs
+VALUES (1,'Not very comfortable yet',
+'By just looking around for now',
+'I’m still figuring it out',
+NOW());
+
+
+Run:
+
+python orientation_engine.py 1
+
+
+Check output:
+
+SELECT * FROM orientation_suggestions;
+
+
+If suggestions appear → engine works.
+
+STEP 4 — Test Full UX Flow
+
+Open browser:
+
+http://localhost/astraal-orientation-module/public_html/orientation/welcome.php
+
+
+Flow:
+
+Welcome screen
+
+Questions
+
+Save inputs
+
+Generating screen
+
+Suggestions screen
+
+Completion screen
+
+STEP 5 — Production Execution (Live Mode)
+
+When learner clicks:
+
+Show my starting suggestions
+
+
+This runs:
+
+exec("python3 /home/username/python/orientation_engine.py $learner_id");
+
+
+Then redirects to suggestions page.
+
+4️⃣ Cron: Automatic Cleanup (Recommended)
+
+Add in cPanel → Cron Jobs:
+
+php /home/username/public_html/cron/cleanup_expired_orientation.php
+
+
+Schedule:
+
+Once per month
+
+This removes:
+
+Orientation inputs older than 30 days
+
+Suggestions older than 30 days
+
+Maintains stateless design.
+
+5️⃣ Faculty Execution Guide
+
+Faculty accesses:
+
+/public_html/faculty/orientation_view.php?learner_id=1
+
+
+Faculty sees:
+
+Self-declared comfort
+
+Self-declared preference
+
+Self-declared clarity
+
+Suggestions shown
+
+Faculty cannot:
+
+Edit
+
+Override
+
+Score
+
+Label
+
+This is by design.
+
+6️⃣ Execution Flow Diagram
+welcome.php
+    ↓
+questions.php
+    ↓
+save_inputs.php
+    ↓
+orientation_engine.py (CLI)
+    ↓
+orientation_suggestions table
+    ↓
+suggestions.php
+    ↓
+complete.php
+    ↓
+dashboard.php
+
+7️⃣ Common Errors & Fixes
+❌ “python3 not found”
+
+Fix:
+
+Use full path:
+
+exec("/usr/local/bin/python3 /home/username/python/orientation_engine.py $learner_id");
+
+❌ Suggestions not appearing
+
+Check:
+
+SELECT * FROM orientation_inputs;
+
+
+If empty → save_inputs not running.
+
+Check:
+
+SELECT * FROM orientation_suggestions;
+
+
+If empty → Python engine failed.
+
+❌ Permission denied
+
+Run:
+
+chmod +x orientation_engine.py

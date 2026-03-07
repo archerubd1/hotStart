@@ -1,0 +1,35 @@
+
+
+SYSTEM Structure 
+
+
+astraal-orientation-module/
+│
+├── database/
+│   └── orientation_schema.sql
+│
+├── public_html/
+│   ├── config/
+│   │   └── db.php
+│   │
+│   ├── orientation/
+│   │   ├── welcome.php
+│   │   ├── questions.php
+│   │   ├── save_inputs.php
+│   │   ├── generating.php
+│   │   ├── suggestions.php
+│   │   ├── complete.php
+│   │
+│   ├── faculty/
+│   │   └── orientation_view.php
+│   │
+│   └── dashboard.php
+│
+├── python/
+│   └── orientation_engine.py
+│
+├── cron/
+│   └── cleanup_expired_orientation.php
+│
+└── docs/
+    └── orientation_governance.md

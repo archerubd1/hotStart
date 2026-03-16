@@ -3,136 +3,322 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Learning Preferences Form</title>
-<!-- Bootstrap 5 CSS -->
+<title>Astraal | Learning Preferences</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Font Awesome CDN -->
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
-    body {
-        background-color: #f4f7fb;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
-    form {
-        background: #fff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-        max-width: 500px;
-        width: 100%;
-    }
-    h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-    }
-    p.info-text {
-        font-size: 14px;
-        color: #777;
-        margin-top: 15px;
-    }
-    button {
-        margin-top: 20px;
-    }
+
+body{
+font-family:"Segoe UI",sans-serif;
+background:linear-gradient(135deg,#6aa9ff,#8fd3f4);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.container-box{
+background:white;
+width:700px;
+padding:40px;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* header */
+
+.header{
+text-align:center;
+margin-bottom:30px;
+}
+
+.header i{
+font-size:32px;
+color:#4CAF50;
+}
+
+.header h2{
+margin-top:10px;
+}
+
+/* progress */
+
+.progress{
+height:8px;
+margin-bottom:30px;
+}
+
+.progress-bar{
+transition:width .4s ease;
+}
+
+/* question step */
+
+.step{
+display:none;
+animation:fade .4s ease;
+}
+
+.step.active{
+display:block;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateX(20px);}
+to{opacity:1;transform:translateX(0);}
+}
+
+/* option cards */
+
+.option-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:15px;
+}
+
+.option-card{
+border:2px solid #eee;
+border-radius:10px;
+padding:15px;
+cursor:pointer;
+transition:0.25s;
+background:#fafafa;
+}
+
+.option-card:hover{
+transform:translateY(-3px);
+box-shadow:0 6px 14px rgba(0,0,0,0.1);
+}
+
+.option-card.selected{
+border-color:#4CAF50;
+background:#eafaf1;
+}
+
+.option-card input{
+display:none;
+}
+
+/* buttons */
+
+.btn-next{
+margin-top:25px;
+width:100%;
+padding:12px;
+font-weight:600;
+}
+
 </style>
+
 </head>
+
 <body>
 
+<div class="container-box">
+
+<div class="header">
+<i class="fa-solid fa-graduation-cap"></i>
+<h2>Your Learning Preferences</h2>
+</div>
+
+<div class="progress">
+<div id="progressBar" class="progress-bar bg-success" style="width:20%"></div>
+</div>
+
 <form method="post" action="save_inputs.php">
-    <h2><i class="fa-solid fa-graduation-cap"></i> Your Learning Preferences</h2>
 
-    <!-- Comfort with online learning -->
-    <div class="mb-3">
-        <p><i class="fa-solid fa-laptop"></i> How comfortable do you feel with online learning platforms?</p>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="comfort_level[]" value="very_comfortable" id="comfort1">
-            <label class="form-check-label" for="comfort1">Very comfortable</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="comfort_level[]" value="somewhat_comfortable" id="comfort2">
-            <label class="form-check-label" for="comfort2">Somewhat comfortable</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="comfort_level[]" value="not_very_comfortable" id="comfort3">
-            <label class="form-check-label" for="comfort3">Not very comfortable yet</label>
-        </div>
-    </div>
+<!-- STEP 1 -->
 
-    <!-- How would you like to begin -->
-    <div class="mb-3">
-        <p><i class="fa-solid fa-compass"></i> How would you like to begin?</p>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="learning_preference[]" value="guided" id="begin1">
-            <label class="form-check-label" for="begin1">With some gentle guidance</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="learning_preference[]" value="explore" id="begin2">
-            <label class="form-check-label" for="begin2">By exploring freely</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="learning_preference[]" value="just_looking" id="begin3">
-            <label class="form-check-label" for="begin3">By just looking around for now</label>
-        </div>
-    </div>
+<div class="step active">
 
-    <!-- Clarity of learning goal -->
-    <div class="mb-3">
-        <p><i class="fa-solid fa-bullseye"></i> How clear is your learning goal?</p>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="intent_clarity[]" value="very_clear" id="clarity1">
-            <label class="form-check-label" for="clarity1">I’m very clear about it</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="intent_clarity[]" value="rough_idea" id="clarity2">
-            <label class="form-check-label" for="clarity2">I have a rough idea</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="intent_clarity[]" value="figuring_out" id="clarity3">
-            <label class="form-check-label" for="clarity3">I’m still figuring it out</label>
-        </div>
-    </div>
+<h5><i class="fa-solid fa-laptop"></i> How comfortable are you with online learning?</h5>
 
-    <!-- Previous hands-on experience -->
-    <div class="mb-3">
-        <p><i class="fa-solid fa-hand-paper"></i> Do you have previous online learning platform hands-on experience?</p>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="hands_on_experience[]" value="yes" id="hands1">
-            <label class="form-check-label" for="hands1">Yes</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="hands_on_experience[]" value="no" id="hands2">
-            <label class="form-check-label" for="hands2">No</label>
-        </div>
-    </div>
+<div class="option-grid">
 
-    <!-- New Question: Time spent online -->
-    <div class="mb-3">
-        <p><i class="fa-solid fa-clock"></i> How much time do you spend online?</p>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="time_online[]" value="1-2" id="time1">
-            <label class="form-check-label" for="time1">1-2hr/day</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="time_online[]" value="3-5" id="time2">
-            <label class="form-check-label" for="time2">3-5hr/day</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" name="time_online[]" value="5-6" id="time3">
-            <label class="form-check-label" for="time3">5-6hr/day</label>
-        </div>
-    </div>
+<label class="option-card">
+<input type="radio" name="comfort_level" value="very_comfortable">
+Very comfortable
+</label>
 
-    <p class="info-text"><i class="fa-solid fa-info-circle"></i> These answers are only used to suggest how you might want to start. They do not affect your access, progress, or evaluation.</p>
+<label class="option-card">
+<input type="radio" name="comfort_level" value="somewhat_comfortable">
+Somewhat comfortable
+</label>
 
-    <button type="submit" class="btn btn-success"><i class="fa-solid fa-arrow-right"></i> Show my starting suggestions</button>
+<label class="option-card">
+<input type="radio" name="comfort_level" value="not_very_comfortable">
+Not very comfortable
+</label>
+
+</div>
+
+<button type="button" class="btn btn-success btn-next" onclick="nextStep()">Next</button>
+
+</div>
+
+
+<!-- STEP 2 -->
+
+<div class="step">
+
+<h5><i class="fa-solid fa-compass"></i> How would you like to begin?</h5>
+
+<div class="option-grid">
+
+<label class="option-card">
+<input type="radio" name="learning_preference" value="guided">
+Guided learning
+</label>
+
+<label class="option-card">
+<input type="radio" name="learning_preference" value="explore">
+Explore freely
+</label>
+
+<label class="option-card">
+<input type="radio" name="learning_preference" value="just_looking">
+Just looking
+</label>
+
+</div>
+
+<button type="button" class="btn btn-success btn-next" onclick="nextStep()">Next</button>
+
+</div>
+
+
+<!-- STEP 3 -->
+
+<div class="step">
+
+<h5><i class="fa-solid fa-bullseye"></i> How clear is your learning goal?</h5>
+
+<div class="option-grid">
+
+<label class="option-card">
+<input type="radio" name="intent_clarity" value="very_clear">
+Very clear
+</label>
+
+<label class="option-card">
+<input type="radio" name="intent_clarity" value="rough_idea">
+Rough idea
+</label>
+
+<label class="option-card">
+<input type="radio" name="intent_clarity" value="figuring_out">
+Still figuring out
+</label>
+
+</div>
+
+<button type="button" class="btn btn-success btn-next" onclick="nextStep()">Next</button>
+
+</div>
+
+
+<!-- STEP 4 -->
+
+<div class="step">
+
+<h5><i class="fa-solid fa-hand-paper"></i> Previous online learning experience?</h5>
+
+<div class="option-grid">
+
+<label class="option-card">
+<input type="radio" name="hands_on_experience" value="yes">
+Yes
+</label>
+
+<label class="option-card">
+<input type="radio" name="hands_on_experience" value="no">
+No
+</label>
+
+</div>
+
+<button type="button" class="btn btn-success btn-next" onclick="nextStep()">Next</button>
+
+</div>
+
+
+<!-- STEP 5 -->
+
+<div class="step">
+
+<h5><i class="fa-solid fa-clock"></i> Time spent online daily?</h5>
+
+<div class="option-grid">
+
+<label class="option-card">
+<input type="radio" name="time_online" value="1-2">
+1–2 hrs
+</label>
+
+<label class="option-card">
+<input type="radio" name="time_online" value="3-5">
+3–5 hrs
+</label>
+
+<label class="option-card">
+<input type="radio" name="time_online" value="5-6">
+5–6 hrs
+</label>
+
+</div>
+
+<button type="submit" class="btn btn-success btn-next">
+Show My Suggestions
+</button>
+
+</div>
+
 </form>
 
-<!-- Bootstrap 5 JS (optional, for interactive components) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+
+<script>
+
+let currentStep=0;
+const steps=document.querySelectorAll(".step");
+const progress=document.getElementById("progressBar");
+
+function nextStep(){
+
+steps[currentStep].classList.remove("active");
+
+currentStep++;
+
+steps[currentStep].classList.add("active");
+
+let percent=((currentStep+1)/steps.length)*100;
+
+progress.style.width=percent+"%";
+
+}
+
+/* card selection */
+
+document.querySelectorAll(".option-card").forEach(card=>{
+card.addEventListener("click",()=>{
+
+let name=card.querySelector("input").name;
+
+document.querySelectorAll(`input[name="${name}"]`).forEach(el=>{
+el.parentElement.classList.remove("selected");
+});
+
+card.classList.add("selected");
+card.querySelector("input").checked=true;
+
+});
+});
+
+</script>
+
 </body>
 </html>
